@@ -7,7 +7,6 @@ export interface IPaginationSetting {
 
 export interface IProps {
     isTableLoading: boolean;
-    todos: ITodo[];
     paginationSettings: IPaginationSetting;
     handleChangePagination: (pagination: any) => void;
     handleCreateTodo: () => void;

@@ -8,7 +8,6 @@ export default createAsyncThunk('todos/list', async (parameters?: Omit<IGetTodo,
     const todoClient: ITodoClient = container.get(Types.TodoClient);
     const sessionDataSource: ISessionDataSource = container.get(Types.SessionDataSource);
     const session = await sessionDataSource.get();
-    console.log(session)
     return todoClient.getTodos({
       access_token: session.accessToken,
       ...parameters,

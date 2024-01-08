@@ -3,7 +3,6 @@ import type { IPaginationSetting } from '../../dashboard/view/props';
 
 export interface IProps {
     isTableLoading: boolean;
-    todos: ITodo[];
     paginationSettings: IPaginationSetting;
     handleChangePagination: (pagination: any) => void;
     handleUpdateTodo: (todo: ITodo) => void;
