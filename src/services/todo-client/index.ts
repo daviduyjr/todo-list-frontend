@@ -4,28 +4,41 @@ import qs from 'qs';
 import Types from '../../types'
 import type { IConfig } from '../config/interface';
 import type {
-    ITodoClient ,IGetTodo, ICreateTodo, IUpdateTodo
+    ITodoClient ,IGetTodo, ICreateTodo, IUpdateTodo,
+    ITodoClientLoginParams, ITodoClientLoginResponse
 } from './interface';
-import { ITodo } from 'src/interfaces/models';
+import { ITodo } from '../../../src/interfaces/models';
 
 @injectable()
 export default class TodoClient implements ITodoClient {
     @inject(Types.Config)
     private config!: IConfig
 
+  async login(params: ITodoClientLoginParams) {
+    const baseUrl = this.config.get('api.baseUrl');
+    const loginEndpoint = this.config.get('api.endpoint.login');
+
+    const url = `${baseUrl}${loginEndpoint}`;
+
+    const res = await axios.post(url, params);
+    if (res.data.status === 'failed') {
+      throw res.data.error;
+    }
+    return res.data.data;
+  }
+
   async getTodos(params: IGetTodo) {
     const { access_token, ...rest } = params;
     const baseUrl = this.config.get('api.baseUrl');
     const endpoint = this.config.get('api.endpoint.GetTodos');
     const query = qs.stringify(rest);
-
+    console.log(access_token)
     const url = `${baseUrl}${endpoint}`;
     const res = await axios.get(`${url}?${query}`, {
       headers: {
-        //Authorization: access_token,
+        Authorization: access_token,
       },
     });
-
     if (res.data.status === 'failed') {
       throw res.data.error;
     }
@@ -39,10 +52,9 @@ export default class TodoClient implements ITodoClient {
     const endpoint = this.config.get('api.endpoint.CreateTodo');
 
     const url = `${baseUrl}${endpoint}`;
-
     const res = await axios.post(url, {...rest}, {
       headers: {
-        // Authorization: accessToken,
+        Authorization: access_token,
       },
     });
 
@@ -61,7 +73,7 @@ export default class TodoClient implements ITodoClient {
     const url = `${baseUrl}${endpoint}`.replace(':id', id!);
     const res = await axios.put(url, rest, {
       headers: {
-        // Authorization: accessToken,
+        Authorization: access_token,
       },
     });
     if (res.data.status === 'failed') {

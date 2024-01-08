@@ -1,15 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 import Dashboard from './dashboard'
-// import Brands from './brands';
-// import Categories from './categories'
-// import Products from './products'
+import Landing from './landing'
 
 export default () => (
   <Routes>
+    <Route path="/login" element={<Landing />} />
     <Route path="" element={<Dashboard />} />
-    {/*
-    <Route path="brands" element={<Brands />} />
-    <Route path="categories" element={<Categories />} />
-    <Route path="products" element={<Products />} /> */}
   </Routes>
 );

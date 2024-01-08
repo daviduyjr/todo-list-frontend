@@ -62,16 +62,18 @@ export default () => {
     }))
     .unwrap()
     .then((response: ITodo[]) => {
-      setTodos(response)
-      setIsTableLoading(false)
-      setPaginationSettings((prevSettings) =>({
-        ...prevSettings,
-        current: paginationSettings.current,
-        pageSize: paginationSettings.pageSize,
-        showSizeChanger: true,
-        showQuickJumper: true,
-        total: Number(response[0].total_count),
-      }));
+      if (response && response.length > 0){
+        setTodos(response)
+        setIsTableLoading(false)
+        setPaginationSettings((prevSettings) =>({
+          ...prevSettings,
+          current: paginationSettings.current,
+          pageSize: paginationSettings.pageSize,
+          showSizeChanger: true,
+          showQuickJumper: true,
+          total: Number(response[0].total_count),
+        }));
+      }
     }).catch((error: any) => {
       setIsTableLoading(false)
     })
@@ -127,16 +129,16 @@ export default () => {
 
   useEffect(() => {
     getTodos()
-    for(let i = 1; i <= 100; i++) {
-      todosArray.push({
-        id: String(i),
-        name: `Todo-${i}`,
-        when_done: new Date().toISOString(),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
-    }
-    setTodos(todosArray)
+    // for(let i = 1; i <= 100; i++) {
+    //   todosArray.push({
+    //     id: String(i),
+    //     name: `Todo-${i}`,
+    //     when_done: new Date().toISOString(),
+    //     created_at: new Date().toISOString(),
+    //     updated_at: new Date().toISOString()
+    //   })
+    // }
+    // setTodos(todosArray)
   }, [])
 
   return (

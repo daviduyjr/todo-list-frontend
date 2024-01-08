@@ -23,6 +23,7 @@ export default (props: IProps) => {
       }))
       .unwrap()
       .then((response: ITodo) => {
+        console.log(response)
         setSubmitting(false)
         submitDone()
       console.log('!! ~ file: index.tsx:24 ~ response:', response)
@@ -30,7 +31,6 @@ export default (props: IProps) => {
         setSubmitting(false)
         submitDone()
       })
-    console.log('!! ~ file: index.tsx:14 ~ values:', values)
     }).catch((error) => {
       console.log('!! ~ file: index.tsx:16 ~ error:', error)
     })
@@ -39,7 +39,6 @@ export default (props: IProps) => {
   const handleUpdateToDoSubmit = (record: ITodo) => {
     setSubmitting(true)
     formTodo.validateFields().then(async (values) => {
-      console.log('!! ~ file: index.tsx:41 ~ values:', values)
       await dispatch(UpdateTodo({
         id: record.id,
         name: values.name
