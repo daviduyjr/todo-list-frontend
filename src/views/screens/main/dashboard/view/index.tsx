@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Button, Table, Row, Col } from 'antd'
 import TodosTable from '../../table';
 import './styles.less';
@@ -7,8 +6,8 @@ import type { IProps } from './props';
 import TodoForm from '../../../shared/todo-form';
 
 export default (props: IProps) => {
-  const {
-    isTableLoading, todos, paginationSettings, handleChangePagination,
+ const {
+    isTableLoading, paginationSettings, handleChangePagination,
     handleCreateTodo, isModalOpen, handleModalOnCancel, method,
     submitDone, contextHolder, handleUpdateTodo, todo, handleSwitchChange,
     handleDeleteTodo,
@@ -34,7 +33,6 @@ export default (props: IProps) => {
         </Col>
         <Col span={24}>
           <TodosTable 
-            todos={todos}
             isTableLoading={isTableLoading}
             paginationSettings={paginationSettings}
             handleChangePagination={handleChangePagination}

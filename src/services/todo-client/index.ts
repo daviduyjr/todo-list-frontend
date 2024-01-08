@@ -32,7 +32,6 @@ export default class TodoClient implements ITodoClient {
     const baseUrl = this.config.get('api.baseUrl');
     const endpoint = this.config.get('api.endpoint.GetTodos');
     const query = qs.stringify(rest);
-    console.log(access_token)
     const url = `${baseUrl}${endpoint}`;
     const res = await axios.get(`${url}?${query}`, {
       headers: {

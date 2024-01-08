@@ -1,14 +1,18 @@
+import { useContext } from 'react';
 import { Button, Table, Divider, Switch } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import type { IProps } from './props';
 import './styles.less';
 import { ITodo } from 'src/interfaces/models';
+import { TodoContext } from '../../../../contexts';
 
 export default (props: IProps) => {
+    const { set, get } = useContext(TodoContext)
     const {
-      isTableLoading, todos, paginationSettings, handleChangePagination,
+      isTableLoading, paginationSettings, handleChangePagination,
       handleUpdateTodo, handleSwitchChange, handleDeleteTodo
     } = props
+    const todos: ITodo[] = get('todos')
     const columns = [
         {
           title: 'NAME',

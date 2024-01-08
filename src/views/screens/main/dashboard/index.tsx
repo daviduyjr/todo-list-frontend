@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import type { ITodo } from 'src/interfaces/models';
 import View from './view';
 import { useDispatch } from 'react-redux';
 import GetTodos from '../../../../state/todos/list'
 import UpdateTodo from '../../../../state/todos/update'
 import { message   } from 'antd';
+import { TodoContext } from '../../../contexts'
+import _, { get as getProperty, set as setProperty } from 'lodash';
 
 export default () => {
   const dispatch: any = useDispatch();
@@ -20,9 +22,22 @@ export default () => {
     showSizeChanger: true,
     showQuickJumper: true,
   });
+  const [fields, setFields] = useState<any>({
+    initializing: true,
+  });
 
+  const set = (key: string, value: any) => {
+    setProperty(fields, key, value);
+    setFields({
+        ...fields,
+    });
+  };
+  
+  const get = (key: string, defaultValue?: any) => getProperty(fields, key, defaultValue);
+  const contextValue = {
+    set, get,
+  };
   const handleChangePagination = async (pagination: any) => {
-    console.log('!! ~ file: index.tsx:25 ~ pagination:', pagination)
 
     await dispatch(GetTodos({
       page: pagination.current,
@@ -31,6 +46,7 @@ export default () => {
     .unwrap()
     .then((response: ITodo[]) => {
       setTodos(response)
+      set('todos', response)
       setIsTableLoading(false)
       setPaginationSettings((prevSettings) =>({
         ...prevSettings,
@@ -40,6 +56,7 @@ export default () => {
         showQuickJumper: true,
         total: Number(response[0].total_count),
       }));
+
     }).catch((error: any) => {
       setIsTableLoading(false)
     })
@@ -63,6 +80,7 @@ export default () => {
     .unwrap()
     .then((response: ITodo[]) => {
       if (response && response.length > 0){
+        set('todos', response)
         setTodos(response)
         setIsTableLoading(false)
         setPaginationSettings((prevSettings) =>({
@@ -127,6 +145,7 @@ export default () => {
     })
   }
 
+
   useEffect(() => {
     getTodos()
     // for(let i = 1; i <= 100; i++) {
@@ -142,21 +161,22 @@ export default () => {
   }, [])
 
   return (
-    <View
-      isTableLoading={isTableLoading}
-      todos={todos}
-      paginationSettings={paginationSettings}
-      handleChangePagination={handleChangePagination}
-      handleCreateTodo={handleCreateTodo}
-      isModalOpen={isModalOpen}
-      handleModalOnCancel={handleModalOnCancel}
-      method={method}
-      submitDone={submitDone}
-      contextHolder={contextHolder}
-      handleUpdateTodo={handleUpdateTodo}
-      todo={todo}
-      handleSwitchChange={handleSwitchChange}
-      handleDeleteTodo={handleDeleteTodo}
-    />
+    <TodoContext.Provider value={contextValue}>
+      <View
+        isTableLoading={isTableLoading}
+        paginationSettings={paginationSettings}
+        handleChangePagination={handleChangePagination}
+        handleCreateTodo={handleCreateTodo}
+        isModalOpen={isModalOpen}
+        handleModalOnCancel={handleModalOnCancel}
+        method={method}
+        submitDone={submitDone}
+        contextHolder={contextHolder}
+        handleUpdateTodo={handleUpdateTodo}
+        todo={todo}
+        handleSwitchChange={handleSwitchChange}
+        handleDeleteTodo={handleDeleteTodo}
+      />
+    </TodoContext.Provider>
   )
 }

@@ -15,7 +15,6 @@ export default (props: IProps) => {
   const { isModalOpen, submitDone } = props;
 
   const handleCreateToDoSubmit = () => {
-    console.log('create')
     setSubmitting(true)
     formTodo.validateFields().then(async (values) => {
       await dispatch(CreateTodo({
@@ -26,7 +25,6 @@ export default (props: IProps) => {
         console.log(response)
         setSubmitting(false)
         submitDone()
-      console.log('!! ~ file: index.tsx:24 ~ response:', response)
       }).catch((error: any) => {
         setSubmitting(false)
         submitDone()
